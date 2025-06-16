@@ -25,6 +25,12 @@ def time2yesterday(now_time: datetime):
     return time_to_midnight
 
 
+def time2nearest_noon(now_time: datetime):
+    nearest_noon = datetime(now_time.year, now_time.month, now_time.day, 12, 0, 0)
+    time_to_nearest_noon = now_time - nearest_noon
+    return time_to_nearest_noon
+
+
 def general_filter(datalist: Iterable, **criteria) -> list:
     def matches(one_data) -> bool:
         def check_criterion(key, value):

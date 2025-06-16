@@ -24,23 +24,20 @@ class BehaviorTrial:
     trial_start: Timestamp
     trial_type: BehaviorTrialType
 
-    exp_template: str = field(default=None)
+    exp_template: Tuple[DayType]
 
     def __post_init__(self):
-        assert self.exp_template in (None, "SAT", "PSE")
+        assert isinstance(self.exp_template, tuple) and all(isinstance(single_template_day, (NullDay, SatDay, PseDay))
+                                                            for single_template_day in self.exp_template)
         assert self.lick_times.ndim == 1
         self.lick_times = self.lick_times[~np.isnan(self.lick_times)]
 
     @cached_property
     def day_type(self) -> Type[DayType]:
-        if self.exp_template is None:
-            return NullDay
-        elif self.exp_template == "SAT":
-            return SatDay
-        elif self.exp_template == "PSE":
-            return PseDay
-        else:
-            raise NotImplementedError
+        first_day = self.exp_template[0]
+        if isinstance(first_day, (NullDay, SatDay, PseDay)):
+            return type(first_day)
+        raise NotImplementedError
 
     @cached_property
     def anticipatory_licking(self) -> float:
@@ -50,15 +47,15 @@ class BehaviorTrial:
 
     @cached_property
     def elapsed_time(self) -> float:
-        return (self.trial_start - self.exp_start + time2yesterday(self.exp_start)).total_seconds()
+        return (self.trial_start - self.exp_start + time2nearest_noon(self.exp_start)).total_seconds()
 
     @cached_property
     def elapsed_hour(self) -> float:
-        return (self.trial_start - self.exp_start + time2yesterday(self.exp_start)).total_seconds() / 3600
+        return (self.trial_start - self.exp_start + time2nearest_noon(self.exp_start)).total_seconds() / 3600
 
     @cached_property
     def elapsed_day(self) -> float:
-        return (self.trial_start - self.exp_start + time2yesterday(self.exp_start)).total_seconds() / (24 * 3600)
+        return (self.trial_start - self.exp_start + time2nearest_noon(self.exp_start)).total_seconds() / (24 * 3600)
 
     @cached_property
     def daily_hour(self) -> float:
@@ -95,7 +92,7 @@ def calculate_last_percent_anticipatory_licking(trial_list: List[BehaviorTrial],
 class BehaviorMice:
     exp_id: str
     mice_id: str
-    exp_template: str = field(default=None)
+    exp_template: Tuple[DayType]
 
     start_time_exp: datetime = field(init=False)
     raw_df: pd.DataFrame = field(init=False, repr=False)
@@ -103,7 +100,8 @@ class BehaviorMice:
     trials: List[BehaviorTrial] = field(init=False, repr=False)
 
     def __post_init__(self):
-        assert self.exp_template in (None, "SAT", "PSE")
+        assert isinstance(self.exp_template, tuple) and all(isinstance(single_template_day, (NullDay, SatDay, PseDay))
+                                                            for single_template_day in self.exp_template)
         print(f"\nLoading {self.exp_id} {self.mice_id}")
         self.load_behavior_data()
         self.extract_trials()
@@ -200,14 +198,10 @@ class BehaviorMice:
 
     @cached_property
     def day_type(self) -> Type[DayType]:
-        if self.exp_template is None:
-            return NullDay
-        elif self.exp_template == "SAT":
-            return SatDay
-        elif self.exp_template == "PSE":
-            return PseDay
-        else:
-            raise NotImplementedError
+        first_day = self.exp_template[0]
+        if isinstance(first_day, (NullDay, SatDay, PseDay)):
+            return type(first_day)
+        raise NotImplementedError
 
     def split_trials_by_days(self) -> Dict[int, List[BehaviorTrial]]:
         trials_by_day = defaultdict(list)
@@ -221,11 +215,13 @@ class BehaviorMice:
 class BehaviorExperiment:
     exp_id: str
     mice: List[BehaviorMice] = field(init=False, repr=False)
-    exp_template: str = field(default=None)
+    exp_template: Tuple[DayType]
 
     def __post_init__(self):
-        assert self.exp_template in (None, "SAT", "PSE")
+        assert isinstance(self.exp_template, tuple) and all(isinstance(single_template_day, (NullDay, SatDay, PseDay))
+                                                            for single_template_day in self.exp_template)
 
+        # load every mouse
         self.mice = []
         for mice_name in os.listdir(self.data_path):
             if path.isfile(path.join(self.data_path, mice_name)):
@@ -240,14 +236,10 @@ class BehaviorExperiment:
 
     @cached_property
     def day_type(self) -> Type[DayType]:
-        if self.exp_template is None:
-            return NullDay
-        elif self.exp_template == "SAT":
-            return SatDay
-        elif self.exp_template == "PSE":
-            return PseDay
-        else:
-            raise NotImplementedError
+        first_day = self.exp_template[0]
+        if isinstance(first_day, (NullDay, SatDay, PseDay)):
+            return type(first_day)
+        raise NotImplementedError
 
     @cached_property
     def data_path(self) -> str:

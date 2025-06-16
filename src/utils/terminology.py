@@ -101,7 +101,15 @@ ADV_PSE: Dict[str, Tuple[DayType, ...]] = {
 }
 ADV_PSE.update({PseDay(i).name: tuple((PseDay(i),)) for i in range(16)})
 
+# experiment template
+TEMPLATE_NULL_2DAYS = (NullDay.Day1, NullDay.Day2)
+TEMPLATE_NULL_7DAYS = (NullDay(_tmp_i) for _tmp_i in range(7))
+TEMPLATE_NULL_16DAYS = (NullDay(_tmp_i) for _tmp_i in range(16))
+TEMPLATE_SAT_16DAYS = (SatDay(_tmp_i) for _tmp_i in range(16))
+TEMPLATE_PSE_16DAYS = (PseDay(_tmp_i) for _tmp_i in range(16))
 
+
+# dataclass for unique mice id
 @dataclass(frozen=True, order=True)
 class MiceUID:
     exp_id: str

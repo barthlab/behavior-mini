@@ -49,7 +49,7 @@ def plot_heatmap_licking(single_mice: BehaviorMice, save_name: str):
                             ha='right', va='center', clip_on=False)
         axs[ax_id].set_yticks([0.5 + i for i in range(17)], ["" for _ in range(17)])
         axs[ax_id].set_xlabel('Lick Time (s)')
-        axs[ax_id].set_ylim(17, 0)
+        # axs[ax_id].set_ylim(17, 0)
         axs[ax_id].set_xlim(*BEHAVIOR_RANGE)
         axs[ax_id].set_xticks([0, 1, ])
         axs[ax_id].spines[['right', 'top']].set_visible(False)
@@ -178,7 +178,6 @@ def plot_single_day_licking_raster(ax: matplotlib.pyplot.Axes, daily_trials: Lis
 
     ax.spines[['right', 'top']].set_visible(False)
     ax.tick_params(axis='both')
-    ax.set_ylim(0, 8)
 
 
 def plot_daily_performance(single_mice: BehaviorMice, save_name: str):
@@ -225,7 +224,7 @@ def plot_daily_summary(
                                        color=BEHAVIOR_TRIAL_TYPE2COLOR[BehaviorTrialType.NoGo])
         if col_id == 0:
             axs[0, col_id].set_ylabel(f"Licking Freq (Hz)")
-            axs[0, col_id].set_title(col_days[col_id].name)
+        axs[0, col_id].set_title(col_days[col_id].name)
         axs[0, col_id].set_xlim(*BEHAVIOR_RANGE)
         axs[0, col_id].axvspan(0, 0.5, lw=0, color=GENERAL_COLORS['puff'], alpha=0.4)
         axs[0, col_id].axvline(x=1, lw=1, color=GENERAL_COLORS['water'], alpha=0.7, ls='--')
