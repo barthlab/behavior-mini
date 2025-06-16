@@ -12,13 +12,13 @@ import matplotlib.patches as mpatches
 from src.behavior_manager import *
 
 plt.rcParams["font.family"] = "Arial"
-plt.rcParams['font.size'] = 8
+plt.rcParams['font.size'] = 5
 plt.rcParams["figure.dpi"] = 300
 
 plt.rcParams.update({
-    'xtick.labelsize': 7,  # X-axis tick labels
-    'ytick.labelsize': 7,  # Y-axis tick labels
-    'axes.labelsize': 7,  # X and Y axis labels
+    'xtick.labelsize': 5,  # X-axis tick labels
+    'ytick.labelsize': 5,  # Y-axis tick labels
+    'axes.labelsize': 6,  # X and Y axis labels
     'axes.titlesize': 7,  # Plot title
     'legend.fontsize': 7,  # Legend font size
     'figure.titlesize': 8  # Figure title (suptitle)
@@ -57,3 +57,20 @@ PERFORMANCE_CMAP = LinearSegmentedColormap(
                  (1.0, 0.0, 0.0)]  # No blue at the end (Green)
     },
     N=256)
+
+
+# Plotting Parameters Config
+
+# bin size related params
+BIN_TRIAL_RASTER_LICKING = 0.01  # s
+BIN_DAY_RASTER_LICKING = 0.02  # day
+ASPECT_RASTER_LICKING = BIN_DAY_RASTER_LICKING / (BIN_TRIAL_RASTER_LICKING * 1.5)
+
+BIN_TRIAL_HEATMAP_PERFORMANCE = 0.1  # s
+BIN_DAY_HEATMAP_PERFORMANCE = 0.1  # day
+ASPECT_HEATMAP_PERFORMANCE = BIN_DAY_HEATMAP_PERFORMANCE / (BIN_TRIAL_HEATMAP_PERFORMANCE * 1.5)
+
+# BIN_DAY_DAILY_SUMMARY = 0.1
+BIN_HOUR_DAILY_SUMMARY = 2  # hr
+BIN_TRIAL_DAILY_SUMMARY = 0.1  # s
+

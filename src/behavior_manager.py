@@ -71,7 +71,7 @@ class BehaviorTrial:
 
     @cached_property
     def day_idx(self) -> int:
-        return int(self.elapsed_time / (24 * 3600))
+        return int(np.floor(self.elapsed_time / (24 * 3600)))
 
     @cached_property
     def mice_uid(self) -> MiceUID:
@@ -219,7 +219,8 @@ class BehaviorExperiment:
 
     def __post_init__(self):
         assert isinstance(self.exp_template, tuple) and all(isinstance(single_template_day, (NullDay, SatDay, PseDay))
-                                                            for single_template_day in self.exp_template)
+                                                            for single_template_day in self.exp_template), \
+            f"Incorrect experiment template: {self.exp_template}"
 
         # load every mouse
         self.mice = []

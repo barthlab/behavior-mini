@@ -37,18 +37,3 @@ LICK_STATUS_CODE = 2
 BEHAVIOR_RANGE = (-1, 3.5)  # s
 ANTICIPATORY_LICKING_RANGE = (0.7, 1)  # s
 
-
-# Plotting Parameters Config
-
-# # bin size related params
-# D_TRIAL_SMALL = 0.01  # s
-# D_DAY_SMALL = 0.02  # day
-# D_TRIAL_LARGE = 0.1  # s
-# D_DAY_LARGE = 0.2  # day
-
-
-# # other plotting params
-# DAY_TEXT_SIZE = 5
-# BEHAVIOR_BIN_SIZE_DAY = 0.1
-# BEHAVIOR_BIN_SIZE_HOUR = 2
-# BEHAVIOR_BIN_SIZE_TRIAL = 0.1
